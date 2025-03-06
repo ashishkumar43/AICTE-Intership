@@ -7,7 +7,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 app = Flask(__name__, template_folder='templates')
-app.config['UPLOAD_FOLDER'] = 'uploads/'
+# app.config['UPLOAD_FOLDER'] = 'uploads/'
+
+app.config['UPLOAD_FOLDER'] = '/tmp/uploads/'
 
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
