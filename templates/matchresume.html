@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Matcher</title>
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: white;
+            border-radius: 12px 12px 0 0;
+            padding: 15px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        textarea, input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        button {
+            background: linear-gradient(45deg, #2575fc, #6a11cb);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease-in-out;
+        }
+        button:hover {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            transform: scale(1.05);
+        }
+        .alert {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #e3f2fd;
+            border-left: 5px solid #2575fc;
+            border-radius: 6px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #2575fc;
+            color: white;
+            font-size: 16px;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        tr:hover {
+            background-color: #d6e4ff;
+            transition: 0.3s;
+        }
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 20px;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: width 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                Job Description & Resume Matcher
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/matcher" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="job_description">Job Description:</label>
+                        <textarea id="job_description" name="job_description" rows="10" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="resumes">Upload Resumes:</label>
+                        <input type="file" id="resumes" name="resumes" multiple required accept=".pdf, .docx, .txt">
+                    </div>
+                    <button type="submit">Match Resumes</button>
+                </form>
+
+                {% if message %}
+                    <div class="alert">
+                        <p><b>Top Matching Resumes:</b></p>
+                        <table>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Resume Name</th>
+                                <th>Similarity Score</th>
+                            </tr>
+                            {% for index in range(top_resumes|length) %}
+                            <tr>
+                                <td><b>Rank {{ index + 1 }}</b></td>
+                                <td>{{ top_resumes[index] }}</td>
+                                <td>
+                                    <div class="progress-bar-container">
+                                        <div class="progress-bar" style="width: {{ similarity_scores[index] }};">
+                                            {{ similarity_scores[index] }}
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
